@@ -7,49 +7,34 @@ services:
     plan: standard
     region: ohio
     runtime: docker
-
     dockerfilePath: ./Dockerfile.backend
-
     # Migraciones en pre-deploy: si fallan, Render no despliega y mantiene la versión anterior
     preDeployCommand: node /app/node_modules/.bin/prisma migrate deploy --schema /app/prisma/schema.prisma
-
     envVars:
       - key: NODE_ENV
         value: production
-
       - key: DATABASE_URL
         fromDatabase:
           name: castilloreyes-postgres
           property: connectionString
-
       - key: JWT_SECRET
         sync: false
-
       - key: JWT_REFRESH_SECRET
         sync: false
-
       - key: JWT_ACCESS_EXPIRES
         value: 15m
-
       - key: JWT_REFRESH_EXPIRES
         value: 7d
-
       - key: FRONTEND_URL
         value: https://castilloreyes-frontend.onrender.com
-
       - key: STORAGE_TYPE
         value: local
-
       - key: LOG_LEVEL
         value: info
-
     autoDeploy: true
-
     healthCheckPath: /api/v1/health
-
     depends:
       - castilloreyes-postgres
-
   # ============================================================
   # FRONTEND (React + Vite + Nginx)
   # ============================================================
@@ -58,18 +43,13 @@ services:
     plan: standard
     region: ohio
     runtime: docker
-
     dockerfilePath: ./Dockerfile.frontend
-
     buildCommand: null
     startCommand: null
-
     envVars:
       - key: VITE_API_URL
         value: https://castilloreyes-backend.onrender.com/api/v1
-
     autoDeploy: true
-
     headers:
       - path: /
         name: Cache-Control
@@ -77,14 +57,11 @@ services:
       - path: /assets/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
-
 databases:
   - name: castilloreyes-postgres
     plan: standard
     region: ohio
-    version: "16"
+    postgresMajorVersion: "16"
     databaseName: gastos_proyectos
-    databaseUser: gastos_user
-    preDeployCommand: null
-    postDeployCommand: null
+    user: gastos_user
     ipAllowList: []
