@@ -50,7 +50,7 @@ services:
     autoDeploy: true
 databases:
   - name: castilloreyes-postgres
-    plan: standard
+    plan: basic-256mb
     region: ohio
     postgresMajorVersion: "16"
     databaseName: gastos_proyectos
